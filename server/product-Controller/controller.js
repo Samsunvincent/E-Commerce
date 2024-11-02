@@ -1,15 +1,13 @@
 let user = require('../db/model/user-Model')
 const { success_function, error_function } = require('../utils/Response-Handler')
 let userType = require('../db/model/userType')
-
-
 const bcrypt = require('bcrypt');
 
 
 
 
 
-exports.signup = async function (req, res) {
+exports.signin = async function (req, res) {
     let body = req.body;
     console.log("body :", body);
 
@@ -27,26 +25,26 @@ exports.signup = async function (req, res) {
         }
 
         // Check if Address exists and validate pincode
-        if (body.Address && body.Address.pincode) {
-            const pincodeRegex = /^\d{6}$/;
-            if (!pincodeRegex.test(body.Address.pincode)) {
-                let response = error_function({
-                    success: false,
-                    statusCode: 400,
-                    message: "Pincode must be exactly 6 digits"
-                });
-                res.status(response.statusCode).send(response);
-                return;
-            }
-        } else {
-            let response = error_function({
-                success: false,
-                statusCode: 400,
-                message: "Address and pincode are required"
-            });
-            res.status(response.statusCode).send(response);
-            return;
-        }
+        // if (body.Address && body.Address.pincode) {
+        //     const pincodeRegex = /^\d{6}$/;
+        //     if (!pincodeRegex.test(body.Address.pincode)) {
+        //         let response = error_function({
+        //             success: false,
+        //             statusCode: 400,
+        //             message: "Pincode must be exactly 6 digits"
+        //         });
+        //         res.status(response.statusCode).send(response);
+        //         return;
+        //     }
+        // } else {
+        //     let response = error_function({
+        //         success: false,
+        //         statusCode: 400,
+        //         message: "Address and pincode are required"
+        //     });
+        //     res.status(response.statusCode).send(response);
+        //     return;
+        // }
 
         // Phone number validation (if needed, adjust your request to include a phone number)
         let phone = body.phone
@@ -129,4 +127,126 @@ exports.signup = async function (req, res) {
     }
 };
 
+exports.getUserTypes = async function(req,res){
+    try {
+        let selectUserTypes = await userType.find();
+       
+
+        if(selectUserTypes){
+            let response = success_function({
+                success : true,
+                statusCode : 200,
+                message : "successfully fetched the userTypes",
+                data : selectUserTypes
+            });
+            res.status(response.statusCode).send(response);
+            return;
+        }
+    } catch (error) {
+        console.log('error',error);
+
+        let response = error_function({
+            success : false,
+            statusCode : 400,
+            message : "userType fetching failed",
+            
+        });
+        res.status(response.statusCode).send(response)
+        return;
+    }
+
+}
+
+exports.getAllUsers = async function(req, res) {
+    try {
+        // Fetch all users from the database
+        let users = await user.find();
+
+        // Log the retrieved users
+        console.log("Fetched users:", users);
+
+        // Check if users were found
+        if (!users || users.length === 0) {
+            let response = {
+                success: true,
+                statusCode: 200,
+                message: "No users found",
+                data: []
+            };
+            res.status(response.statusCode).send(response);
+            return;
+        }
+
+        // Send the users back to the client
+        let response = {
+            success: true,
+            statusCode: 200,
+            message: "Users fetched successfully",
+            data: users
+        };
+        res.status(response.statusCode).send(response);
+        
+    } catch (error) {
+        // Log the error
+        console.log("Error fetching users:", error);
+        
+        // Send an error response
+        let response = error_function({
+            success: false,
+            statusCode: 400,
+            message: "Users fetching failed"
+        });
+        res.status(response.statusCode).send(response);
+    }
+};
+
+exports.getUser = async function(req,res){
+    try {
+        let id = req.params.id;
+    console.log("id from single user",id);
+
+    if(!id){
+        let response = error_function({
+            success : false,
+            statusCode : 400,
+            messsage : "something went wrong"
+        });
+        res.status(response.statusCode).send(response);
+        return;
+    }else{
+        let singleUser = await user.findOne({_id : id});
+        console.log("singleUser",singleUser);
+        
+        if(!singleUser){
+            let response = error_function({
+                success : false,
+                statusCode : 400,
+                message : "User not found",
+
+            });
+            res.status(response.statusCode).send(response);
+            return;
+        }else{
+            let response = success_function({
+                success : true,
+                statusCode : 200,
+                message : "User found",
+                data : singleUser
+            });
+            res.status(response.statusCode).send(response);
+            return
+        }
+    }
+    } catch (error) {
+        console.log('error',error);
+
+        let response = error_function({
+            success : false,
+            statusCode : 400,
+            message : "Something went wrong, try again"
+        });
+        res.status(response.statusCode).send(response);
+        requestAnimationFrame;
+    }
+}
 

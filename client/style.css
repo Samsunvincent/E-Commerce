@@ -1,0 +1,21 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.jordan-sizing{
+    width: 25px;
+    margin-left: 40px;
+    /* padding-top: 15px; */
+}
+.f-nav-p{
+    /* padding: 9px; */
+    background-color: rgb(245,245,245);
+}
+.list-decoration{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}

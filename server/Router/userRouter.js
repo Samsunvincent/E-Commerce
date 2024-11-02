@@ -11,6 +11,9 @@ function setAccessControl(access_types){
     }
 }
 
-Router.post('/signup',setAccessControl('*'),usercontroller.signup)
+Router.post('/signin',setAccessControl('*'),usercontroller.signin)
+Router.get('/getUserType',usercontroller.getUserTypes);
+Router.get('/users',setAccessControl('*'),usercontroller.getAllUsers);
+Router.get('/user/:id',setAccessControl('*'),usercontroller.getUser);
 
 module.exports = Router

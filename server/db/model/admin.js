@@ -16,4 +16,4 @@ const adminSchema = new mongoose.Schema({
     ref : "userType"
 }
 })
-module.exports = mongoose.model('admin',adminSchema);
+module.exports = mongoose.model('admin_data',adminSchema);
