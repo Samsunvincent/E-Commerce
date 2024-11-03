@@ -1,7 +1,9 @@
 const express = require('express');
-const router = express.Router();
-const authcontroller = require('../Controller/auth-Controller');
+const Router = express.Router();
+const productController = require('../Controller/produc-Controller')
 const accessControl = require('../Controller/access-Controller').accessControl
+
+
 
 function setAccessControl(access_types){
     return(req,res,next)=>{
@@ -9,11 +11,6 @@ function setAccessControl(access_types){
     }
 }
 
-router.post('/login',setAccessControl('*'),authcontroller.login);
+Router.post('/addProducts',setAccessControl('3'),productController.addProducts);
 
-
-
-
-
-
-module.exports = router
+module.exports = Router

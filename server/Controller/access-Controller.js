@@ -3,7 +3,7 @@ let user = require('../db/model/user-Model')
 const dotenv = require('dotenv');
 dotenv.config();
 
-const control_data = require('../product-Controller/contol-Data.json');
+const control_data = require('../Controller/contol-Data.json');
 
 
 

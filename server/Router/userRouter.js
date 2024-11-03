@@ -1,7 +1,7 @@
 const express = require('express');
 const Router = express.Router();
-const usercontroller = require('../product-Controller/controller');
-const accessControl = require('../product-Controller/access-Controller').accessControl
+const usercontroller = require('../Controller/userController');
+const accessControl = require('../Controller/access-Controller').accessControl
 
 
 
