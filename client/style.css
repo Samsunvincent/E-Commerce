@@ -19,3 +19,7 @@ a{
     text-decoration: none;
     color: inherit;
 }
+.cat-image-size{
+    width: 90vw;
+    margin: auto;
+}

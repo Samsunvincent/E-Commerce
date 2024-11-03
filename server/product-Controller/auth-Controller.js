@@ -6,7 +6,7 @@ const { success_function, error_function } = require('../utils/Response-Handler'
 const dotenv = require('dotenv');
 dotenv.config();
 
-;
+
 
 exports.login = async function (req, res) {
     try {
@@ -46,7 +46,7 @@ exports.login = async function (req, res) {
         }
 
         // Find user in the users collection
-        let check_user = await users.findOne({ email: email });
+        let check_user = await users.findOne({ email: email }).populate('userType')
         console.log("Checking email from users data:", check_user);
 
         if (check_user) {
@@ -72,14 +72,14 @@ exports.login = async function (req, res) {
         }
 
         // If no user found, check in the admin collection
-        let check_admin = await admin_data.findOne({ email: email });
+        let check_admin = await admin_data.findOne({ email: email }).populate('userType')
         console.log("Checking email from admin data:", check_admin);
 
         if (check_admin) {
             const isPasswordMatch = await bcrypt.compare(password, check_admin.password);
             if (isPasswordMatch) {
                 // Generate JWT token for admin
-                const token = jwt.sign({ id: check_admin._id, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+                const token = jwt.sign({ id: check_admin._id, role: 'admin' }, process.env.PRIVATE_KEY, { expiresIn: '1h' });
                 let response = success_function({
                     success: true,
                     statusCode: 200,
