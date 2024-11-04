@@ -55,8 +55,8 @@ exports.accessControl = async function (access_types,req,res,next){
                     else{
                         console.log("decoded",decoded);
 
-                        let user_data = await user.findOne({_id : decoded.user_id}).populate("userType");
-                        console.log("user from access control",user);
+                        let user_data = await user.findOne({_id : decoded.id}).populate("userType");
+                        console.log("user from access control",user_data);
 
                         
                         console.log("user",user_data);
@@ -67,7 +67,7 @@ exports.accessControl = async function (access_types,req,res,next){
                         // req.params = id;
                         // console.log("req.params",req.params);
 
-                        let user_type = user_data.userType.user_type;
+                        let user_type = user_data.userType.userType;
                         console.log('user_type',user_type);
 
                         let allowed = access_types.split(",").map((obj)=>control_data[obj]);

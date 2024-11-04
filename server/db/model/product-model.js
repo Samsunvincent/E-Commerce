@@ -29,12 +29,12 @@ let product_Schema = new mongoose.Schema({
         min: 0,
         default: 0
     },
-    images: [
-        {
-            url: { type: String, required: true },
-            alt: { type: String }
-        }
-    ],
+    // images: [
+    //     {
+    //         url: { type: String, required: true },
+    //         alt: { type: String }
+    //     }
+    // ],
 });
 
-exports.module = mongoose.model('product_data',product_Schema);
+module.exports = mongoose.model('product_data',product_Schema);
