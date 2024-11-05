@@ -1,0 +1,34 @@
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
+    .jordan-sizing{
+        width: 25px;
+        margin-left: 40px;
+        /* padding-top: 15px; */
+    }
+    .nav-container{
+        /* padding: 9px; */
+        background-color: rgb(245,245,245);
+    }
+    .nav-links{
+        list-style: none;
+    }
+    a{
+        text-decoration: none;
+        color: inherit;
+    }
+    .no-button-style{
+        background: none;        /* Remove background */
+    border: none;           /* Remove border */
+    color: inherit;         /* Inherit text color */
+    padding: 0;             /* Remove padding */
+    margin: 0;              /* Remove margin */
+    font: inherit;          /* Inherit font properties */
+    cursor: default;        /* Change cursor to default */
+    text-align: inherit;    /* Inherit text alignment */
+    text-decoration: none;   /* Remove underline */
+    box-shadow: none;       /* Remove box shadow */
+    display: inline;
+    }

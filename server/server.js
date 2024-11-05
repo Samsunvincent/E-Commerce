@@ -4,15 +4,23 @@ const dotenv = require('dotenv');
 dotenv.config();
 const mongoConnect = require('./db/connect');
 mongoConnect();
+const path = require('path')
+const fs = require('fs')
+const cors = require('cors')
 
 const router = require('./Router/userRouter')
 const authRouter = require('../server/Router/authRouter')
 const productRouter = require('./Router/productRouter')
 
-
+app.use(cors());
 app.use(express.json({limit : "500mb"}));
 app.use(express.urlencoded({extended : true}));
 app.use(express.static('../client'));
+
+const uploadDir = path.join(__dirname, 'public');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
 app.use(router)
 app.use(authRouter)
 app.use(productRouter)

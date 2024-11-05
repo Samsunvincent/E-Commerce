@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./addProduct.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body onload="getCategory()">
+    <div class="d-flex p-4">
+        <div class="row">
+            <div class="col-2">
+                <div>
+                    <p>ProXduct</p>
+                    <p>MAIN</p>
+                    <div class="d-flex gap-3">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <div>
+                    <form onsubmit="addProduct(event)">
+                        <div>
+                            <label>Name</label>
+                            <input type="text" name="name" id="name">
+                        </div>
+                        <div>
+                            <label for="description">Description</label>
+                            <input type="text" name="description" id="description">
+
+                        </div>
+                        <div>
+                            <label for="price">price</label>
+                            <input type="text" name="price" id="price">
+                        </div>
+                        <div>
+                            <select required name="Category" id="category">
+                                <option selected="category">Category</option>
+                            </select>
+                            <label for="UserType">Category</label>
+                        </div>
+                        <div>
+                            <label for="brand">Brand</label>
+                            <input type="text" name="brand" id="brand">
+                        </div>
+                        <div>
+                            <label for="stock">stock</label>
+                            <input type="text" name="stock" id="stock">
+                        </div>
+                        <div>
+                            <label for="Images">Images</label>
+                            <input type="file" name="imagesUpload" id="imagesUpload" accept="image/*" multiple>
+                        </div>
+                        <div>
+                            <input type="submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>

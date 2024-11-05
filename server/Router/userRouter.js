@@ -15,5 +15,6 @@ Router.post('/signin',setAccessControl('*'),usercontroller.signin)
 Router.get('/getUserType',usercontroller.getUserTypes);
 Router.get('/users',setAccessControl('*'),usercontroller.getAllUsers);
 Router.get('/user/:id',setAccessControl('*'),usercontroller.getUser);
+Router.get('/getcategory',usercontroller.getCategory);
 
 module.exports = Router

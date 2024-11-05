@@ -3,6 +3,8 @@ const { success_function, error_function } = require('../utils/Response-Handler'
 let userType = require('../db/model/userType')
 const bcrypt = require('bcrypt');
 
+const category = require('../db/model/category');
+
 
 
 
@@ -247,6 +249,31 @@ exports.getUser = async function(req,res){
         });
         res.status(response.statusCode).send(response);
         requestAnimationFrame;
+    }
+}
+
+exports.getCategory = async function(req,res){
+    try {
+        let categories = await category.find();
+
+        if(categories){
+            let response = success_function({
+                success : true,
+                statusCode : 200,
+                message : null,
+                data : categories
+            });
+            res.status(response.statusCode).send(response);
+            return;
+        }
+    } catch (error) {
+        console.log("error",error);
+        let response = error_function({
+            success : false,
+            statusCode : 400,
+            message : "something went wrong try again"
+        });
+        res.status(response.statusCode).send(response);
     }
 }
 
