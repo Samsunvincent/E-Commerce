@@ -14,6 +14,9 @@ let user_Schema = new mongoose.Schema({
         type : String
     },
     Address : {
+        name : {
+            type : String
+        },
         street : {
             type : String
         },

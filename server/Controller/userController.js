@@ -248,7 +248,7 @@ exports.getUser = async function(req,res){
             message : "Something went wrong, try again"
         });
         res.status(response.statusCode).send(response);
-        requestAnimationFrame;
+        return;
     }
 }
 
@@ -276,4 +276,56 @@ exports.getCategory = async function(req,res){
         res.status(response.statusCode).send(response);
     }
 }
+
+exports.addAddress = async function(req, res) {
+    let id = req.params.id;
+    let Address = req.body.Address; // Corrected to match JSON input
+
+    if (!Address) {
+        // Return an error if the address is not provided
+        let response = error_function({
+            success: false,
+            statusCode: 400,
+            message: "Address field is required"
+        });
+        res.status(response.statusCode).send(response);
+        return;
+    } else {
+        try {
+            // Update the user's address field
+            let updateData = await user.updateOne(
+                { _id: id },
+                { $set: { Address: Address } }
+            );
+
+            console.log("updateData", updateData);
+
+            // Check if the update was successful
+            if (updateData.matchedCount === 1 && updateData.modifiedCount === 1) {
+                let response = success_function({
+                    success: true,
+                    statusCode: 200,
+                    message: "Address updated successfully",
+                    data: updateData
+                });
+                res.status(response.statusCode).send(response);
+            } else {
+                let response = error_function({
+                    success: false,
+                    statusCode: 400,
+                    message: "Something went wrong, address was not updated"
+                });
+                res.status(response.statusCode).send(response);
+            }
+        } catch (error) {
+            let response = error_function({
+                success: false,
+                statusCode: 500,
+                message: "Server error",
+                error: error.message
+            });
+            res.status(response.statusCode).send(response);
+        }
+    }
+};
 

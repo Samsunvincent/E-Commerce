@@ -16,5 +16,6 @@ Router.get('/getUserType',usercontroller.getUserTypes);
 Router.get('/users',setAccessControl('*'),usercontroller.getAllUsers);
 Router.get('/user/:id',setAccessControl('*'),usercontroller.getUser);
 Router.get('/getcategory',usercontroller.getCategory);
+Router.patch('/updateaddress/:id',usercontroller.addAddress);
 
 module.exports = Router
