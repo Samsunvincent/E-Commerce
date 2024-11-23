@@ -20,8 +20,8 @@
     box-shadow: none;
     margin-right: 10px;
 }
-#emptycart{
-    display: none;
+.emptycart{
+   
     width: 221.91px;
     height: 162px;
 }

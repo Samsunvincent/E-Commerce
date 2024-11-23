@@ -418,6 +418,7 @@ async function Deliveryto() {
         let data = parsed_response.data
 
         let Address = data.Address;
+        console.log("ASddress",Address)
 
         let deliveryto = document.getElementById('deliveryto');
 
@@ -465,51 +466,101 @@ async function showForm() {
 }
 
 async function addAddress(event) {
-    event.preventDefault()
+    event.preventDefault();
 
     let params = new URLSearchParams(window.location.search);
 
-    let street = document.getElementById('street').value;
-    let city = document.getElementById('city').value;
-    let state = document.getElementById('state').value;
-    let country = document.getElementById('country').value;
-    let pincode = document.getElementById('pincode').value;
+    // Get input values from the form
+    let name = document.getElementById('name1').value.trim();
+    console.log("name111111",name);
+    let street = document.getElementById('street').value.trim();
+    let city = document.getElementById('city').value.trim();
+    let state = document.getElementById('state').value.trim();
+    let country = document.getElementById('country').value.trim();
+    let pincode = document.getElementById('pincode').value.trim();
 
-    let data = {
-        Address: {
-            street,
-            city,
-            state,
-            country,
-            pincode
 
-        }
 
+    // Validations
+    if(!name){
+        alert('name is required')
+    }
+    if (!street) {
+        alert("Street is required");
+        return;
+    }
+  
+    if (!city) {
+        alert("City is required");
+        return;
+    }
+    if (!state) {
+        alert("State is required");
+        return;
+    }
+    if (!country) {
+        alert("Country is required");
+        return;
+    }
+    if (!pincode) {
+        alert("Pincode is required");
+        return;
+    }
+
+    // Check if pincode is a valid number and has a specific length (e.g., 5 or 6 digits)
+    if (!/^\d{5,6}$/.test(pincode)) {
+        alert("Pincode must be a 5 or 6-digit number");
+        return;
+    }
+
+    // Prepare the new address object
+    let newAddress = {
+        name,
+        street,
+        city,
+        state,
+        country,
+        pincode,
+        
     };
-    console.log("data", data);
 
-    let strdata = JSON.stringify(data);
-    console.log("strdata", strdata);
+    console.log("New Address:", newAddress);
 
-
-
+    // Get user ID from the URL
     let id = params.get('id');
-    console.log("id", id);
+    console.log("User ID:", id);
+
     try {
+        // Send the new address to the backend
         let response = await fetch(`/addAddress/${id}`, {
             method: 'PATCH',
             headers: {
-                'Content-type': 'application/json',
+                'Content-Type': 'application/json',
             },
-            body: strdata,
+            body: JSON.stringify({ Address: newAddress }),
+        });
 
-        },
-        );
-        console.log("response", response);
+        console.log("Response:", response);
+
+        if (response.status === 200) {
+            let parsed_response = await response.json();
+            console.log("Parsed Response:", parsed_response);
+
+            if (parsed_response.statusCode === 200) {
+                alert(parsed_response.message);
+
+               
+              
+            } else {
+                alert(parsed_response.message);
+            }
+        } else {
+            alert("Failed to add address. Please try again.");
+        }
     } catch (error) {
-        console.log("error", error);
+        console.log("Error:", error);
+        alert("An error occurred while adding the address. Please try again later.");
     }
-
 }
 
 async function buyerData() {
@@ -577,7 +628,7 @@ async function getAllProducts() {
                         <!-- Second image is initially hidden and shown on hover if it exists -->
                         ${secondImageUrl ? `<img src="${secondImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;">` : ''}
                     </div>   
-                    <div class="px-3 pt-4">${data[i].name.slice(0, 10) + ".."}</div>
+                    <div class="px-3 pt-4">${data[i].name.slice(0, 50) + ".."}</div>
                     <div class="text-danger px-3 pb-4">$${data[i].price}</div>
                     <div>
                         <button class="px-3" onclick="handleaddtocart('${data[i]._id}', event, ${data[i].price})">Add to cart</button>
@@ -587,6 +638,37 @@ async function getAllProducts() {
             }
 
             productsContainer.innerHTML = productData;
+            let brandnewcontainer = document.getElementById('brand-new-container');
+
+            let brandNewData = '';
+            
+            // Loop through the last 4 products in the data array in reverse order (most recent first)
+            for (let i = data.length - 1; i >= Math.max(data.length - 4, 0); i--) {
+                let firstImageUrl = data[i].images && data[i].images[0] ? data[i].images[0].url : '';
+                let secondImageUrl = data[i].images && data[i].images[1] ? data[i].images[1].url : '';
+                
+                brandNewData += `
+                    <div class="box-alignment shadow-lg mb-5 bg-body-tertiary" style="border-radius: 20px;">
+                        <div class="image-container">
+                            <!-- First image is initially visible -->
+                            <img src="${firstImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;">
+                            
+                            <!-- Second image is initially hidden and shown on hover if it exists -->
+                            ${secondImageUrl ? `<img src="${secondImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;">` : ''}
+                        </div>   
+                        <div class="px-3 pt-4">${data[i].name.slice(0, 50) + ".."}</div>
+                        <div class="text-danger px-3 pb-4">$${data[i].price}</div>
+                        <div>
+                            <button class="px-3" onclick="handleaddtocart('${data[i]._id}', event, ${data[i].price})">Add to cart</button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Once the loop finishes, update the innerHTML of the container
+            brandnewcontainer.innerHTML = brandNewData;
+            
+            
         }
     } catch (error) {
         console.log('error', error);
@@ -855,7 +937,6 @@ async function gotoCart() {
     // If both id and token are valid, redirect to the cart
     window.location.href = `viewCart.html?id=${id}&login=${token_key}`;
 }
-
 async function getCartData() {
     let params = new URLSearchParams(window.location.search);
     let id = params.get('id');
@@ -889,30 +970,28 @@ async function getCartData() {
         let parsed_response = await response.json();
 
         let cartData = document.getElementById('cartData');
+        let emptyCartElement = document.getElementById('emptycart');
 
-        if (parsed_response.data.length === 0) {
-            // Display empty cart message
-            let emptyCartElement = document.getElementById('emptycart');
-            emptyCartElement.style.display = "block";  // Show the empty cart message
-
-        } 
-        
-
-        // Populate cart data if items exist
-        let cd_values = '';
-        parsed_response.data.forEach((item) => {
-            cd_values += `
-                <div class="p-5 card">
-                    <div><img src="${item.images[0]?.url || ''}" alt="Product image"></div>
-                    <div>${item.name || 'Unknown Product'}</div>
-                    <div>${item.brand || 'Unknown Brand'}</div>
-                    <div>${item.price || 'N/A'}</div>
-                    <div>${item.stock || 'Out of stock'}</div>
-                </div>
-            `;
-        });
-
-        cartData.innerHTML = cd_values;
+        // If there are no items in the cart, show the empty cart message
+        if (parsed_response.data && parsed_response.data.length === 0) {
+            emptyCartElement.style.display = "block"// Show the empty cart message
+            cartData.innerHTML = '';  // Clear the cart data section
+        } else {
+            emptyCartElement.style.display = "none" // Hide the empty cart message
+            let cd_values = '';
+            parsed_response.data.forEach((item) => {
+                cd_values += `
+                    <div class="p-5 card">
+                        <div><img src="${item.images[0]?.url || ''}" alt="Product image"></div>
+                        <div>${item.name || 'Unknown Product'}</div>
+                        <div>${item.brand || 'Unknown Brand'}</div>
+                        <div>${item.price || 'N/A'}</div>
+                        <div>${item.stock || 'Out of stock'}</div>
+                    </div>
+                `;
+            });
+            cartData.innerHTML = cd_values;  // Populate the cart data
+        }
 
     } catch (error) {
         console.error("Error fetching cart data:", error);
@@ -1062,31 +1141,44 @@ async function manageAddress() {
         let data = parsed_response.data;
         console.log("data", data);
 
-        let address = data.Address; // Assuming 'Address' is an array or an object
-        console.log('address', address);
+        let addresses = data.Address; // Assuming 'Address' is an array
+        console.log('addresses', addresses);
 
         // Hide the main content and show the manage address content
         document.getElementById('main-content').style.display = "none";
         document.getElementById('manageAdresses').style.display = "block";
 
         // Display the address data inside the manageAdresses div
-        const addressContainer = document.getElementById('addresses-container');
+        const addressContainer = document.getElementById('address-data');
         addressContainer.innerHTML = ''; // Clear any previous data
 
-        // Assuming address is an array of addresses, iterate through it
-        if (Array.isArray(address) && address.length > 0) {
-            address.forEach(addr => {
-                const addressElement = document.createElement('div');
-                addressElement.classList.add('address-item');
-                addressElement.innerHTML = `
-                    <p>Address: ${addr}</p>
-                `;
-                addressContainer.appendChild(addressElement);
-            });
+        if (addresses.length === 0) {
+            // If no addresses are available, display a message
+            addressContainer.innerHTML = `
+                <div class="no-address-message pt-5">
+                    No addresses found for this user.
+                </div>
+            `;
         } else {
-            addressContainer.innerHTML = "<p>No addresses found.</p>";
-        }
+            // Map over the addresses and create HTML for each address
+            let address_rows = addresses.map(address => `
+              <div class="pt-3">
+              <div class="card">
+                  <div class="address-item px-3 p-3 ">
+                    <div class="d-flex gap-4">
+                        <div style="color: black; font-weight: 500; font-size: 14px; font-family: Inter, -apple-system, Helvetica, Arial, sans-serif;">${data.name}</div>
+                        <div><strong>${data.phone_number}</strong></div>
+                    </div>
+                    <div>
+                        <div>${address.street}, ${address.city}, ${address.state}, ${address.pincode} </div>
+                    </div>
+                    
+                </div>
+              </div></div>
+            `).join('');
 
+            addressContainer.innerHTML = address_rows;
+        }
     } catch (error) {
         console.log("Error fetching user data:", error);
     }
@@ -1179,6 +1271,14 @@ function initializeEditSaveCancelLogic() {
     setupField('email');
     setupField('phone');
 }
+
+function closeForm() {
+    document.getElementById("address-form").style.display = "none";
+    document.getElementById("newaddress").style.display = "block";
+
+    
+  }
+  
 
 
 

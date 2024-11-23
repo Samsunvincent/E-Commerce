@@ -134,3 +134,16 @@ input:focus {
     border-color: #007bff;  /* Optional: Add border color change when focus */
 }
 
+.no-address-container{
+
+   height: 85vh;
+   width: 100vh;
+}
+.no-address-found{
+    font-size: 20px;
+    font-weight: 500;
+    color: rgb(33, 33, 33);
+}
+.empty-add-address{
+    padding-right: 4rem;
+}

@@ -53,23 +53,28 @@
 
         <div class="p-3">
             <div class="container m-auto text-center background-color p-3 fs-4">
-               CART
+                CART
             </div>
         </div>
-        <div class="container text-center background-color emptycart-box-sizing">
-            <div class="text-center pt-5">
-                <img src="./empty cart.webp" id="emptycart" alt="Empty cart" class="img-fluid mx-auto d-block">
-                <div>
-                    Your cart is empty!
-                </div>
-                <div>
-                    Add items to it now
+        
+        <!-- Empty Cart Message -->
+        <div id="emptycart">
+            <div class="container w-100 text-center background-color emptycart-box-sizing" >
+                <div class="text-center pt-5">
+                    <img src="./empty cart.webp" alt="Empty cart" class="img-fluid mx-auto emptycart">
+                    <div>
+                        Your cart is empty!
+                    </div>
+                    <div>
+                        Add items to it now
+                    </div>
                 </div>
             </div>
         </div>
         
-       
+        <!-- Product Data -->
         <div id="cartData"></div>
+        
       
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

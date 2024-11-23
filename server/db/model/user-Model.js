@@ -13,24 +13,16 @@ let user_Schema = new mongoose.Schema({
     phone_number : {
         type : String
     },
-    Address : {
-
-        street : {
-            type : String
+ Address: [
+        {
+            name : {type : String},
+            street: { type: String },
+            city: { type: String },
+            state: { type: String },
+            country: { type: String },
+            pincode: { type: String },
         },
-        city : {
-            type : String
-        },
-        country : { 
-            type : String
-        },
-        state : { 
-            type : String
-        },
-        pincode : {
-            type : String
-        }
-    },
+    ],
     userType : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "userType"

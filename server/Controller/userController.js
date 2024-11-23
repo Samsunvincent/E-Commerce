@@ -333,57 +333,61 @@ exports.getCategory = async function(req,res){
     }
 }
 
-exports.addAddress = async function(req, res) {
-    let id = req.params.id;
-    let Address = req.body.Address; // Corrected to match JSON input
+exports.addAddress = async function (req, res) {
+    let id = req.params.id; // User ID from request parameters
+    let newAddress = req.body.Address;
+    console.log("new address",newAddress) // New address from the request body
 
-    if (!Address) {
-        // Return an error if the address is not provided
+    // Check if the Address field is provided
+    if (!newAddress) {
         let response = error_function({
             success: false,
             statusCode: 400,
-            message: "Address field is required"
+            message: "Address field is required",
         });
         res.status(response.statusCode).send(response);
         return;
-    } else {
-        try {
-            // Update the user's address field
-            let updateData = await user.updateOne(
-                { _id: id },
-                { $set: { Address: Address } }
-            );
+    }
 
-            console.log("updateData", updateData);
+    try {
+        // Add the new address to the user's Address array using $push
+        let updateData = await user.updateOne(
+            { _id: id },
+            { $push: { Address: newAddress } } // Push the new address to the Address array
+        );
 
-            // Check if the update was successful
-            if (updateData.matchedCount === 1 && updateData.modifiedCount === 1) {
-                let response = success_function({
-                    success: true,
-                    statusCode: 200,
-                    message: "Address updated successfully",
-                    data: updateData
-                });
-                res.status(response.statusCode).send(response);
-            } else {
-                let response = error_function({
-                    success: false,
-                    statusCode: 400,
-                    message: "Something went wrong, address was not updated"
-                });
-                res.status(response.statusCode).send(response);
-            }
-        } catch (error) {
+        console.log("updateData", updateData);
+
+        // Check if the update was successful
+        if (updateData.matchedCount === 1 && updateData.modifiedCount === 1) {
+            let response = success_function({
+                success: true,
+                statusCode: 200,
+                message: "Address added successfully",
+                data: updateData,
+            });
+           return res.status(response.statusCode).send(response);
+        } else {
             let response = error_function({
                 success: false,
-                statusCode: 500,
-                message: "Server error",
-                error: error.message
+                statusCode: 400,
+                message: "Something went wrong, address was not added",
             });
-            res.status(response.statusCode).send(response);
+            return res.status(response.statusCode).send(response);
         }
+    } catch (error) {
+        console.error("Error adding address:", error);
+
+        let response = error_function({
+            success: false,
+            statusCode: 400,
+            message: "Server error",
+            error: error.message,
+        });
+        return res.status(response.statusCode).send(response);
     }
 };
+
 
 
 exports.filterCategory = async function(req, res) {
