@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.jordan-sizing {
+    width: 25px;
+}
+
+.f-nav-p {
+    background-color: rgb(245, 245, 245);
+}
+
+.list-decoration {
+    list-style: none;
+    margin-bottom: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.cat-image-size {
+    width: 100%;
+    max-width: 1630px;
+    margin: 0 auto;
+}
+
+.remove-button-style {
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: inherit;
+    text-decoration: none;
+    box-shadow: none;
+    margin-right: 10px;
+}
+
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  /* width:0%; */
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+
+ 
+ .modal {
+    
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 104%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.4); 
+    padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; 
+  border: 1px solid #888;
+  max-width: 30%; 
+}
+
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+Add Zoom Animation
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}  
+
+#search-container {
+  display: flex;
+  align-items: center;
+}
+
+#search-container input[type="text"] {
+  padding: 5px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: none; /* Initially hidden */
+}
+
+#search-container button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+#search-container button:hover {
+  opacity: 0.8;
+}
+
+.d-none {
+  display: none;
+}
+
+
+.product-card{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+}
+.box-alignment{
+  background-color: blue;
+  box-shadow: 5px;
+}
+.text-color{
+  color: grey;
+  font-size: 14px;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 300px; /* Ensure height matches the image height */
+ 
+  overflow: hidden; /* Hide overflow during transition */
+  background-color: rgb(235, 233, 233);
+}
+
+.imagehover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 1s ease-in-out; /* Smooth opacity transition */
+}
+
+.imagehover:first-child {
+  opacity: 1; /* Initially show the first image */
+}
+
+.imagehover:last-child {
+  opacity: 0; /* Initially hide the second image */
+}
+
+.image-container:hover .imagehover:first-child {
+  opacity: 0; /* Hide first image when hovered */
+}
+
+.image-container:hover .imagehover:last-child {
+  opacity: 1; /* Show second image when hovered */
+}

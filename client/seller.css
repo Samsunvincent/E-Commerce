@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.jordan-sizing {
+    width: 25px;
+    margin-left: 40px;
+    /* padding-top: 15px; */
+}
+
+.nav-container {
+    background-color: rgb(245, 245, 245);
+}
+
+.nav-links {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.no-button-style {
+    background: none; /* Remove background */
+    border: none; /* Remove border */
+    color: inherit; /* Inherit text color */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    font: inherit; /* Inherit font properties */
+    cursor: pointer; /* Change cursor to default */
+    text-align: inherit; /* Inherit text alignment */
+    text-decoration: none; /* Remove underline */
+    box-shadow: none; /* Remove box shadow */
+    display: inline;
+}
+
+/* Main wrapper to hold side navigation and content */
+.main-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+/* Side Navigation Styles */
+.side-nav {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    height: 100%; /* Full height */
+    position: fixed; /* Fix the side nav */
+    top: 0;
+    left: 0;
+}
+
+.side-nav-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.side-nav-list li {
+    margin: 10px 0;
+}
+
+.side-nav-list li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 8px;
+}
+
+.side-nav-list li a:hover {
+    background-color: #444;
+}
+
+/* Content Area */
+.content {
+    margin-left: 250px; /* Offset to make space for side nav */
+    padding: 20px;
+    background-color: #f4f4f4;
+    flex-grow: 1;
+    overflow-y: auto; /* Allow scrolling if content is too long */
+}
+
+.content h1 {
+    margin-top: 0;
+}
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+    gap: 10px; /* Space between grid items */
+}

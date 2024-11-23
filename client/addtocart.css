@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.logo-sizing {
+    width: 25px;
+}
+
+.nav-container {
+    background-color: rgb(245, 245, 245);
+}
+
+.nav-list {
+    list-style: none;
+    margin-bottom: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.cat-image-size {
+    width: 100%;
+    max-width: 1630px;
+    margin: 0 auto;
+}
+
+.account-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: inherit;
+    text-decoration: none;
+    box-shadow: none;
+    margin-right: 10px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 16px;
+}
+
+.delivery-text {
+    font-size: 14px;
+    color: #000;
+}
+
+.filter-link {
+    cursor: pointer;
+}
+
+.signin-link {
+    color: inherit;
+}
+
+.profile-link,
+.logout-link {
+    cursor: pointer;
+}

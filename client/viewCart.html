@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="./viewCart.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+
+    <body onload="getCartData()" class=bg-light>
+
+        <div class="d-flex align-items-center f-nav-p justify-content-between px-4 py-2">
+            <div class="d-flex">
+                <div>
+                    <img src="https://img.icons8.com/?size=100&id=24934&format=png&color=000000" alt="" class="jordan-sizing">
+                </div>
+               
+            </div>
+        
+            <ul class="d-flex align-items-center gap-4 list-decoration">
+                <li><a href="#" class="text-decoration-none text-body">Find a Store</a></li> |
+                <li onclick="getfiltercategory()"><a href="#" class="text-decoration-none text-body" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">Filter</a></li> |
+                <li onclick="gotoCart()"><i class="fa fa-shopping-cart" style="font-size:24px" ></i></li> |
+          
+                <div class="dropdown" >
+                    <button class="remove-button-style" id="account" data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="fa fa-user-circle-o" style="font-size:24px"></i></button>    
+                    <ul class="dropdown-menu">
+                        <li onclick="buyerDashboard()"><a class="dropdown-item">Manage profile</a></li>
+                        <li><a class="dropdown-item" href="#">Orders</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li onclick="logOut()"><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </ul>
+        </div>
+
+        <div class="p-3">
+            <div class="container m-auto text-center background-color p-3 fs-4">
+               CART
+            </div>
+        </div>
+        <div class="container text-center background-color emptycart-box-sizing">
+            <div class="text-center pt-5">
+                <img src="./empty cart.webp" id="emptycart" alt="Empty cart" class="img-fluid mx-auto d-block">
+                <div>
+                    Your cart is empty!
+                </div>
+                <div>
+                    Add items to it now
+                </div>
+            </div>
+        </div>
+        
+       
+        <div id="cartData"></div>
+      
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"
+        ></script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"
+        ></script>
+        <script src="./script.js"></script>
+    </body>
+
+</html>

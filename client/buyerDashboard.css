@@ -1,0 +1,166 @@
+/* Side Navigation */
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(198, 198, 198);
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+
+.sidenav a,
+.sidenav .buy-button-style-none {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #000000;
+    display: block;
+    transition: 0.3s;
+}
+
+/* Change color on hover */
+.sidenav a:hover,
+.sidenav .buy-button-style-none:hover {
+    color: #6d7b6c;
+}
+
+/* Close Button in Sidenav */
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Page Content Push */
+#main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+/* Buy Button Style (removes all styling for a minimal look) */
+.buy-button-style-none {
+    background: none;
+    border: none;
+    padding: 8px 8px 8px 32px;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    display: block;
+    font-size: 25px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+/* Menu Icon Style */
+.buy-menu-button {
+    width: 30px;
+}
+
+/* Address Section (initially hidden) */
+#buy-address {
+    display: none;
+}
+
+/* Dropdown Styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    color: inherit;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    background-color: rgb(144, 144, 144);
+    min-width: 160px;
+    /* box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); */
+    z-index: 1;
+    border-radius: 7px ;
+}
+
+.dropdown-content a {
+    color:rgb(150, 163, 150);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: rgb(243, 243, 243);
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.address-form {
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 20px; /* Padding inside the form */
+}
+
+h2 {
+    color: #333; /* Darker color for the heading */
+}
+
+.form-label {
+    font-weight: bold; /* Bold labels */
+    color: #555; /* Dark gray color for labels */
+}
+
+.form-control {
+    border-radius: 4px; /* Rounded corners for inputs */
+    transition: border-color 0.3s; /* Smooth transition for focus */
+}
+
+.form-control:focus {
+    border-color: #04AA6D; /* Green border on focus */
+    box-shadow: 0 0 5px rgba(4, 170, 109, 0.5); /* Subtle shadow on focus */
+}
+
+.btn-success {
+    background-color: #04AA6D; /* Green background */
+    border: none; /* No border */
+}
+
+.btn-success:hover {
+    background-color: #037a52; /* Darker green on hover */
+}
+
+.custom-box {
+    background-color: white;   /* White background */
+    border-radius: 15px;       /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light box-shadow */
+    padding: 20px;
+}

@@ -1,0 +1,136 @@
+.settings-profile-name {
+    width: 309.5px;
+    height: 74px;
+    background-color: white;
+}
+
+.f-nav-p {
+    background-color: rgb(245, 245, 245);
+}
+
+.jordan-sizing {
+    width: 25px;
+}
+
+.list-decoration {
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.remove-button-style {
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: inherit;
+    text-decoration: none;
+    box-shadow: none;
+    margin-right: 10px;
+}
+
+.settings-side-nav {
+    background-color: white;
+    width: 309.5px;
+}
+
+.settings-my-order,
+.settings-account-settings,
+.settings-payment {
+    color: rgb(140, 141, 140);
+    border-bottom: 1px rgb(140, 141, 140);
+    font-size: 16px;
+    font-weight: 600px;
+}
+
+.button-hov:hover {
+    background-color: rgb(245, 250, 255);
+    color: rgb(73, 123, 240);
+}
+
+.settings-logout {
+    color: rgb(147, 162, 180);
+    font-weight: 600;
+}
+
+.settings-logout:hover {
+    color: rgb(73, 123, 240);
+}
+
+.settings-frequent {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.frequent-button-style {
+    color: rgb(167, 155, 149);
+}
+
+.main-content {
+    margin-left: 16px;
+    background-color: white;
+    width: 75%;
+}
+
+.personalInformation{
+    font-weight: 500;
+}
+
+.faqs{
+    font-weight: 500;
+    font-size: 18px;
+}.account-action-btn {
+    display: block; /* Makes buttons stack vertically */
+
+    margin-bottom: 10px; /* Adds space between the buttons */
+    
+}
+.deleacc-color{
+    color: rgb(216,88,131);
+}
+.deaacc-color,.edit-button-color{
+    color: rgb(87,116,241);
+}
+
+.manage-adress-text{
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 25.2px;
+    color: rgb(33, 33, 33);
+    font-family: Inter, -apple-system, Helvetica, Arial, sans-serif;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+}
+
+.lBFHyk {
+    position: absolute;
+    left: 20px;
+    top: 18px;
+    font-size: 14px;
+    color: var(--color-grey-grade4);
+    transition: transform 0.2s ease, font-size 0.2s ease, top 0.2s ease;
+    pointer-events: none;  /* Makes sure the label does not interfere with input clicks */
+}
+
+input:focus + .lBFHyk,
+input:not(:placeholder-shown) + .lBFHyk {
+    transform: translateY(-22px);  /* Moves label up */
+    font-size: 12px;  /* Reduces font size */
+    top: 0px;  /* Adjusts the top position */
+}
+
+input {
+    padding: 18px 20px 0;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #007bff;  /* Optional: Add border color change when focus */
+}
+

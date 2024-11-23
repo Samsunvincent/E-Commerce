@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS v5.3.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body onload="indextobuyer(); Deliveryto(); getAllProducts()">
+    <div class="d-flex align-items-center f-nav-p justify-content-between px-4 py-2">
+        <div class="d-flex">
+            <div>
+                <img src="https://img.icons8.com/?size=100&id=24934&format=png&color=000000" alt="" class="jordan-sizing">
+            </div>
+            <div>
+                <ul class="list-decoration">
+                    <li id="deliveryto">Delivery to</li>
+                </ul>
+            </div>
+        </div>
+    
+        <ul class="d-flex align-items-center gap-4 list-decoration">
+            <li><a href="#">Find a Store</a></li> |
+            <li onclick="getfiltercategory()"><a href="#" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">Filter</a></li> |
+            <li onclick="gotoCart()"><i class="fa fa-shopping-cart" style="font-size:24px" ></i></li> |
+            <li><a class="bg-blue-500" href="./signin.html" id="signin">Sign In</a></li>
+            <div class="dropdown" >
+                <button class="remove-button-style" id="account" data-bs-toggle="dropdown" aria-expanded="false"><i
+                        class="fa fa-user-circle-o" style="font-size:24px"></i></button>    
+                <ul class="dropdown-menu">
+                    <li onclick="buyerDashboard()"><a class="dropdown-item">Manage profile</a></li>
+                    <li><a class="dropdown-item" href="#">Orders</a></li>
+                    <li onclick="gotosettings()"><a class="dropdown-item" href="#">Settings</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li onclick="logOut()"><a class="dropdown-item" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </ul>
+    </div>
+    <div>
+        <div>
+            <ul class="list-unstyled d-flex gap-4 justify-content-center pt-3 text-color">
+                <a href="#featured"><li>FEATURED</li></a>
+                <li>BESTSELLERS</li>
+                <li>BRAND NEW,JUST FOR YOU</li>
+                <li>TRENDING CATEGORIES</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-center">
+        <img src="https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/h_1944,c_limit/9a596369-6f37-4324-abad-e68ef16f7e2c/nike-just-do-it.png"
+            alt="" class="cat-image-size">
+    </div>
+    
+    <!-- Offcanvas Filter Panel -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filter by Category</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" >
+            <!-- Your filter options go here -->
+            <form onsubmit="filterCategory(event)">
+                <div class="mb-3">
+                    <label for="categorySelect" class="form-label">Category</label>
+                    <select id="categorySelect" class="form-select">
+                        <option selected>Select a category</option>
+                    </select>
+                </div>
+                <!-- Add more filter options as needed -->
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+            </form>
+        </div>
+    </div>
+    <div class="text-center p-5 fs-2 fw-bolder" id="featured">
+        FEATURED
+    </div>
+    <div id="productsContainer" class="product-card container "  ></div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>

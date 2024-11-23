@@ -1,0 +1,37 @@
+.f-nav-p {
+    background-color: rgb(245, 245, 245);
+}
+.jordan-sizing {
+    width: 25px;
+}
+.list-decoration {
+    list-style: none;
+    margin-bottom: 0;
+}
+.remove-button-style {
+    background: none;
+    border: none;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: inherit;
+    text-decoration: none;
+    box-shadow: none;
+    margin-right: 10px;
+}
+#emptycart{
+    display: none;
+    width: 221.91px;
+    height: 162px;
+}
+
+.emptycart-box-sizing{
+    width: 1244;
+    height: 369.2px;
+}
+.background-color{
+    background-color: white;
+    box-shadow: 1px 1px 1px 1px white; 
+    border-radius: 10px;
+}
