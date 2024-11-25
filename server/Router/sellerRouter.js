@@ -18,6 +18,7 @@ Router.post('/addProducts/:id', upload, productController.addProducts);
 Router.get('/getProducts',productController.getProducts)
 
 Router.get('/getAddedProducts/:id',productController.getAddedProducts);
+Router.get('/getSingleViewProduct/:id',productController.getSingleViewProduct)
 
 
 module.exports = Router

@@ -418,13 +418,13 @@ async function Deliveryto() {
         let data = parsed_response.data
 
         let Address = data.Address;
-        console.log("ASddress",Address)
+        console.log("ASddress", Address)
 
         let deliveryto = document.getElementById('deliveryto');
 
         let deliveryData = `
-        <div>Deliveryto  ${data.name}
-        <div>${Address.street} ${Address.pincode}<div>
+        <div>Deliveryto  ${Address[0].name}
+        <div>${Address[0].street} ${Address[0].pincode}<div>
         </div>
         `
         deliveryto.innerHTML = deliveryData
@@ -472,7 +472,7 @@ async function addAddress(event) {
 
     // Get input values from the form
     let name = document.getElementById('name1').value.trim();
-    console.log("name111111",name);
+    console.log("name111111", name);
     let street = document.getElementById('street').value.trim();
     let city = document.getElementById('city').value.trim();
     let state = document.getElementById('state').value.trim();
@@ -482,14 +482,14 @@ async function addAddress(event) {
 
 
     // Validations
-    if(!name){
+    if (!name) {
         alert('name is required')
     }
     if (!street) {
         alert("Street is required");
         return;
     }
-  
+
     if (!city) {
         alert("City is required");
         return;
@@ -521,7 +521,7 @@ async function addAddress(event) {
         state,
         country,
         pincode,
-        
+
     };
 
     console.log("New Address:", newAddress);
@@ -549,8 +549,8 @@ async function addAddress(event) {
             if (parsed_response.statusCode === 200) {
                 alert(parsed_response.message);
 
-               
-              
+
+
             } else {
                 alert(parsed_response.message);
             }
@@ -620,15 +620,15 @@ async function getAllProducts() {
 
                 // Only include the second image if it's available
                 productData += `
-                  <div class="box-alignment shadow-lg mb-5 bg-body-tertiary" style="border-radius: 20px;">
-                    <div class="image-container">
+                  <div class="box-alignment shadow-lg mb-5 bg-body-tertiary" style="border-radius: 20px;" >
+                    <div class="image-container" onclick = "gotoSingleview('${data[i]._id}')">
                         <!-- First image is initially visible -->
-                        <img src="${firstImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;">
+                        <img src="${firstImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;" >
                         
                         <!-- Second image is initially hidden and shown on hover if it exists -->
                         ${secondImageUrl ? `<img src="${secondImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;">` : ''}
                     </div>   
-                    <div class="px-3 pt-4">${data[i].name.slice(0, 50) + ".."}</div>
+                    <div class="px-3 pt-4" onclick = "gotoSingleview('${data[i]._id}')">${data[i].name.slice(0, 50) + ".."}</div>
                     <div class="text-danger px-3 pb-4">$${data[i].price}</div>
                     <div>
                         <button class="px-3" onclick="handleaddtocart('${data[i]._id}', event, ${data[i].price})">Add to cart</button>
@@ -641,12 +641,12 @@ async function getAllProducts() {
             let brandnewcontainer = document.getElementById('brand-new-container');
 
             let brandNewData = '';
-            
+
             // Loop through the last 4 products in the data array in reverse order (most recent first)
             for (let i = data.length - 1; i >= Math.max(data.length - 4, 0); i--) {
                 let firstImageUrl = data[i].images && data[i].images[0] ? data[i].images[0].url : '';
                 let secondImageUrl = data[i].images && data[i].images[1] ? data[i].images[1].url : '';
-                
+
                 brandNewData += `
                     <div class="box-alignment shadow-lg mb-5 bg-body-tertiary" style="border-radius: 20px;">
                         <div class="image-container">
@@ -664,16 +664,145 @@ async function getAllProducts() {
                     </div>
                 `;
             }
-            
+
             // Once the loop finishes, update the innerHTML of the container
             brandnewcontainer.innerHTML = brandNewData;
-            
-            
+
+
         }
     } catch (error) {
         console.log('error', error);
     }
 }
+
+function gotoSingleview(p_id) {
+    console.log("id", p_id)
+
+    let params = new URLSearchParams(window.location.search);
+
+    let id = params.get('id');
+    console.log("id", id);
+
+    let token_key = params.get("login");
+
+    window.location.href = `singleProductView.html?p_id=${p_id}&id=${id}&login=${token_key}`;
+}
+
+async function singleView() {
+    let params = new URLSearchParams(window.location.search);
+
+    let id = params.get('id');
+    let token_key = params.get("login");
+    let p_id = params.get('p_id');
+
+    let token = localStorage.getItem(token_key);
+    console.log('token', token);
+
+    try {
+        let response = await fetch(`/getSingleViewProduct/${p_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        console.log("response", response);
+
+        if (response.status === 200) {
+            let parsed_response = await response.json();
+            console.log("parsed_response", parsed_response);
+            if (parsed_response.statusCode === 200) {
+                let data = parsed_response.data;
+                console.log("data", data);
+                if (data && data.product.images) {
+                    let imageContainer = document.getElementById('image-container');
+                    let enlargeContainer = document.getElementById('enlargeContainer');
+
+                    // Clear the container if there are previous elements
+                    imageContainer.innerHTML = '';
+                    enlargeContainer.innerHTML = ''; // Clear the enlarge container
+
+                    // Display the first image as default
+                    if (data.product.images.length > 0) {
+                        let firstImage = data.product.images[0];
+                        enlargeContainer.innerHTML = `
+                            <img src="${firstImage.url}" alt="${firstImage.alt}" style="width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
+                        `;
+                    }
+
+                    // Add images vertically
+                    data.product.images.forEach((image) => {
+                        let imageBox = `
+                            <div class="image-box" style="margin-bottom: 16px;" onclick="enlarge('${encodeURIComponent(image.url)}')">
+                                <img src="${image.url}" alt="${image.alt}" style="width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                        `;
+                        imageContainer.innerHTML += imageBox;
+                    });
+
+                    let productData = document.getElementById('productData');
+
+                    let productdetails = `
+                    <div class="pt-5">
+                        <div class="productname">${data.product.name}</div>
+                        <div class="productprice pt-2">$${data.product.price}</div>
+                        <div class="pt-3">
+                            <div class="productbrand">Brand</div>
+                            <div>${data.product.brand}</div>
+                        </div>
+                        <div class = "pt-4">
+                            <div class="productabout">About this product</div>
+                            <div>${data.product.description}</div>
+                        </div>
+                        <div class=" pt-4">
+                            <div class="productseller">Seller Details</div>
+                            <div>Name : ${data.seller.name}</div>
+                            <div>Email : ${data.seller.email}</div>
+                        </div>
+                        <div>
+                            <div><button onclick="handleaddtocart('${data._id}', event, ${data.price})">Add to cart</button></div>
+                            <div><button>Buy now</button></div>
+                        </div>
+                    </div>
+                    `
+                    productData.innerHTML = productdetails;
+                }
+            } else {
+                alert(parsed_response.message);
+            }
+        } else {
+            alert("Fetching failed");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+function enlarge(imageUrl) {
+    let enlargeContainer = document.getElementById('enlargeContainer');
+
+    // Decode the URL before using it
+    let decodedUrl = decodeURIComponent(imageUrl);
+
+    // Clear existing content
+    enlargeContainer.innerHTML = '';
+
+    // Add the clicked image
+    let imageElement = `
+       <div style="width: 100%; height: 50%;" class="card">
+         <img src="${decodedUrl}" alt="Enlarged Image"  border: 1px solid #ddd; border-radius: 8px;">
+       </div>
+      
+
+    `;
+    enlargeContainer.innerHTML = imageElement;
+}
+
+
+
+
+
+
 
 async function getfiltercategory() {
     try {
@@ -1035,7 +1164,7 @@ async function getAddedProducts() {
                     <div class="card" style="width: 18rem; height:392.4px;">
                     <img src="${data[i].images[0].url}" class="card-img-top" alt="Product Image" style="width: 286.4px; height:214.8px;">
                     <div class="card-body">
-                        <h5 class="card-title">${data[i].name.slice(0,50)}</h5>
+                        <h5 class="card-title">${data[i].name.slice(0, 50)}</h5>
                    
                         <div class="d-flex justify-content-between align-items-center">
                         <span class="text-success font-weight-bold">${data[i].price}</span>
@@ -1054,13 +1183,13 @@ async function getAddedProducts() {
     }
 }
 
-async function gotosettings(){
+async function gotosettings() {
     let params = new URLSearchParams(window.location.search);
 
     let id = params.get('id');
     let token_key = params.get('login');
 
-    if(token_key){
+    if (token_key) {
         window.location.href = `settings.html?id=${id}&login=${token_key}`
     }
 }
@@ -1166,7 +1295,7 @@ async function manageAddress() {
               <div class="card">
                   <div class="address-item px-3 p-3 ">
                     <div class="d-flex gap-4">
-                        <div style="color: black; font-weight: 500; font-size: 14px; font-family: Inter, -apple-system, Helvetica, Arial, sans-serif;">${data.name}</div>
+                        <div style="color: black; font-weight: 500; font-size: 14px; font-family: Inter, -apple-system, Helvetica, Arial, sans-serif;">${address.name}</div>
                         <div><strong>${data.phone_number}</strong></div>
                     </div>
                     <div>
@@ -1207,7 +1336,7 @@ function initializeEditSaveCancelLogic() {
 
         let params = new URLSearchParams(window.location.search);
 
-        let id =params.get('id')
+        let id = params.get('id')
 
         // Toggle between edit and read-only mode
         function toggleEditMode(editMode) {
@@ -1276,9 +1405,26 @@ function closeForm() {
     document.getElementById("address-form").style.display = "none";
     document.getElementById("newaddress").style.display = "block";
 
-    
-  }
-  
+
+}
+
+function checkUserStatus() {
+    let params = new URLSearchParams(window.location.search);
+    let id = params.get('id');
+    console.log("id", id)
+
+    let profile = document.getElementById('profile');
+    let signin = document.getElementById('signin'); 
+    if (id === null) {
+        profile.style.display = "none"
+    } else {
+        profile.style.display = 'block'
+
+        signin.style.display = "none"
+
+    }
+}
+
 
 
 

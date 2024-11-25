@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 let product_Schema = new mongoose.Schema({
     sellerID : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "user"
+        ref : "user_data" // Ensure it matches the user model's registered name
     },
     name: {
         type: String,

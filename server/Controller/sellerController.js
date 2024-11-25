@@ -1,26 +1,27 @@
 let userType = require('../db/model/userType');
 const { success_function, error_function } = require('../utils/Response-Handler');
 let products = require('../db/model/product-model');
-let category = require('../db/model/category')
+let category = require('../db/model/category');
+const user = require('../db/model/user-Model');
 
 
-exports.addProducts = async function(req, res) {
+exports.addProducts = async function (req, res) {
     const body = req.body;
     console.log("Request body:", body);
 
-  
+
 
     let body_category = body.category;
-    console.log("body category",body_category);
+    console.log("body category", body_category);
 
-    let match_category = await category.findOne({category : body_category});
-    console.log("matchcategory",match_category);
+    let match_category = await category.findOne({ category: body_category });
+    console.log("matchcategory", match_category);
 
     body.category = match_category;
-    console.log("body.category",body.category);
+    console.log("body.category", body.category);
 
     let sellerID = req.params.id;
-    console.log("sellerId",sellerID);
+    console.log("sellerId", sellerID);
     try {
         // Check if the request body is empty
         if (!body || Object.keys(body).length === 0) {
@@ -53,7 +54,7 @@ exports.addProducts = async function(req, res) {
 
         // Create a new product document with provided data and images
         const newProduct = new products({
-            sellerID :  req.params.id,
+            sellerID: req.params.id,
             name: body.name,
             description: body.description,
             price: body.price,
@@ -73,7 +74,7 @@ exports.addProducts = async function(req, res) {
             data: productDetails,
         });
         return res.status(response.statusCode).send(response);
-        
+
     } catch (error) {
         console.error("Error adding product:", error);
 
@@ -87,43 +88,43 @@ exports.addProducts = async function(req, res) {
     }
 };
 
-exports.getProducts = async function(req,res){
+exports.getProducts = async function (req, res) {
     try {
         let productData = await products.find();
-        console.log("productData",productData);
+        console.log("productData", productData);
 
-        if(!productData){
+        if (!productData) {
             let response = error_function({
-                success  : false,
-                statusCode : 400,
-                
+                success: false,
+                statusCode: 400,
+
             });
             return res.status(response.statusCode).send(response);
-            
-        }else{
+
+        } else {
             let response = success_function({
-                success : true,
-                statusCode : 200,
-                message : "fetching successfull",
-                data : productData,
+                success: true,
+                statusCode: 200,
+                message: "fetching successfull",
+                data: productData,
             });
             return res.status(response.statusCode).send(response);
-            
+
         }
 
     } catch (error) {
-        console.log("error",error);
+        console.log("error", error);
 
         let response = error_function({
-            success : false,
-            statusCode : 400,
-            message : "something went wrong",
+            success: false,
+            statusCode: 400,
+            message: "something went wrong",
         });
         return res.status(response.statusCode).send(response);
-        
+
     }
 }
-exports.getAddedProducts = async function(req, res) {
+exports.getAddedProducts = async function (req, res) {
     let sellerID = req.params.id;  // The seller's ID is passed as a route parameter
     console.log("sellerID", sellerID);  // Log sellerID to verify it
 
@@ -163,3 +164,51 @@ exports.getAddedProducts = async function(req, res) {
         return res.status(response.statusCode).send(response);
     }
 };
+
+exports.getSingleViewProduct = async function (req, res) {
+
+    let id = req.params.id;
+    console.log("id", id);
+
+    if (!id) {
+        let response = error_function({
+            success: false,
+            statusCode: 400,
+            message: "id is not available",
+        });
+        return res.status(response.statusCode).send(response);
+    }
+
+    try {
+        // Populate both category and sellerID
+        let productMatch = await products.findOne({ _id: id })
+            .populate('category')  // Populating category
+            .populate('sellerID');  // Populating sellerID
+        
+        console.log("productMatch", productMatch);
+        
+        if (!productMatch) {
+            let response = error_function({
+                success: false,
+                statusCode: 400,
+                message: "product not found",
+            });
+            return res.status(response.statusCode).send(response);
+        } else {
+            let response = success_function({
+                success: true,
+                statusCode: 200,
+                message: "product fetched",
+                data: {
+                    product: productMatch,
+                    category: productMatch.category.category,  // Assuming category has a 'category' field
+                    seller: productMatch.sellerID,  // Added populated seller data
+                }
+            });
+            return res.status(response.statusCode).send(response);
+        }
+    } catch (error) {
+        console.log("error", error);
+        // You may want to handle errors here (e.g., return a 500 server error response)
+    }
+}
