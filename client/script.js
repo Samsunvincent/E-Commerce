@@ -1,4 +1,5 @@
 
+
 async function getUserTypes() {
     try {
         let response = await fetch('/getUserType', { method: 'GET' })
@@ -649,14 +650,14 @@ async function getAllProducts() {
 
                 brandNewData += `
                     <div class="box-alignment shadow-lg mb-5 bg-body-tertiary" style="border-radius: 20px;">
-                        <div class="image-container">
+                        <div class="image-container" onclick = "gotoSingleview('${data[i]._id}')">
                             <!-- First image is initially visible -->
                             <img src="${firstImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;">
                             
                             <!-- Second image is initially hidden and shown on hover if it exists -->
                             ${secondImageUrl ? `<img src="${secondImageUrl}" class="imagehover" style="height: 300px; width: 100%; border-radius: 20px 20px 0px 0px;">` : ''}
                         </div>   
-                        <div class="px-3 pt-4">${data[i].name.slice(0, 50) + ".."}</div>
+                        <div class="px-3 pt-4" onclick = "gotoSingleview('${data[i]._id}')">${data[i].name.slice(0, 50) + ".."}</div>
                         <div class="text-danger px-3 pb-4">$${data[i].price}</div>
                         <div>
                             <button class="px-3" onclick="handleaddtocart('${data[i]._id}', event, ${data[i].price})">Add to cart</button>
@@ -759,9 +760,9 @@ async function singleView() {
                             <div>Name : ${data.seller.name}</div>
                             <div>Email : ${data.seller.email}</div>
                         </div>
-                        <div>
-                            <div><button onclick="handleaddtocart('${data._id}', event, ${data.price})">Add to cart</button></div>
-                            <div><button>Buy now</button></div>
+                        <div class="d-flex gap-5 pt-4">
+                            <div><button onclick="handleaddtocart('${data.product._id}', event, ${data.product.price})" class="p-3" style="width: 224.16px; height: 56px;background-color: rgb(255,159,0);border:none;">Add to cart</button></div>
+                            <div><button class="p-3" style="width: 224.16px; height: 56px;background-color: rgb(251,100,27);border:none;">Buy now</button></div>
                         </div>
                     </div>
                     `
@@ -951,29 +952,25 @@ async function addtocart() {
     let params = new URLSearchParams(window.location.search);
 
     let productId = params.get('id');
-    let quantity = params.get('quantity');
+    let quantity = parseInt(params.get('quantity'), 10) || 1; // Default to 1 if invalid
     let price = params.get('price');
     let userId = params.get('userId');
     let token_key = params.get('login');
 
-    // Parse quantity and ensure it's a valid number
-    quantity = parseInt(quantity, 10); // Convert to an integer
-
-    // Validate quantity to ensure it's a positive number, and set default if invalid
-    if (!quantity || isNaN(quantity) || quantity <= 0) {
-        quantity = 1; // Default to 1 if invalid
+    let token = localStorage.getItem(token_key);
+    if (!token) {
+        console.error("Authorization token missing. Please log in again.");
+        return;
     }
 
-    // Limit the quantity to a reasonable value
-    quantity = Math.min(quantity, 100); // Set max quantity to 100
-
-    let token = localStorage.getItem(token_key);
+    // Limit quantity to a maximum of 100
+    quantity = Math.min(quantity, 100);
 
     let addToCartData = {
         productId,
         quantity,
         price,
-        userId
+        userId,
     };
 
     try {
@@ -981,7 +978,7 @@ async function addtocart() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(addToCartData),
         });
@@ -993,52 +990,107 @@ async function addtocart() {
         let parsed_response = await response.json();
         let data = parsed_response.data;
 
-        let cartData = document.getElementById('cartData');
+        if (!data || !data.cart || !data.cart.items || !data.cartItemsWithProducts) {
+            console.error("Invalid response structure:", parsed_response);
+            return;
+        }
 
-        // Reset cart data before updating the UI to avoid duplication
+        let cartData = document.getElementById('cartData');
+        let totalAmountContainer = document.getElementById('totalAmount');
+
+        // Reset cart data before updating the UI
         cartData.innerHTML = '';
 
-        // Initialize an empty string to hold the HTML for the cart rows
         let cartRows = '';
+        let totalAmount = 0;
 
-        // Iterate over the items in the cart data
         for (let i = 0; i < data.cart.items.length; i++) {
             let item = data.cart.items[i];
             let productData = data.cartItemsWithProducts[i];
 
-            // Ensure productData and product exist before accessing properties
             if (productData && productData.product) {
                 let product = productData.product;
+                let imageUrl = product.images && product.images[0] ? product.images[0].url : '/path/to/placeholder.jpg';
 
-                // Ensure the product has an images array with at least one image
-                let imageUrl = product.images && product.images[0] ? product.images[0].url : 'placeholder.jpg';
+                totalAmount += product.price *1;
 
-                // Create the HTML structure for each item in the cart
                 cartRows += `
-                    <div class="card p-4">
-                        <div class="d-flex gap-5">
-                            <div>
-                                <img src="${imageUrl}" alt="${product.name}" style="width: 200px; height: 300px;">
+                <div class="card p-4">
+                    <div class="d-flex gap-5">
+                        <div>
+                            <img src="${imageUrl}" alt="${product.name}" style="width: 112px; height: 112px;">
+                        </div>
+                        <div>
+                            <div class="pt-3">${product.name.slice(0, 60) + "..."}</div>
+
+                            <div class="pt-3">
+                                <strong>Seller Details:</strong><br>
+                                Name: ${product.sellerID.name}<br>
+                                Email: ${product.sellerID.email}
                             </div>
-                            <div>
-                                <div>${product.name}</div>
-                                <div>${product.price}</div>
+                            <div class="d-flex justify-content-between">
+                                <div class="pt-3">$${product.price}</div>
+                                <div class="pt-3"><button onclick="handleremovecartdata('${item.productId}')" class="remove-button-style">REMOVE</button></div>
                             </div>
                         </div>
                     </div>
-                `;
-            } else {
-                console.warn(`Invalid product data at index ${i}`, productData);
+                </div>`;
             }
         }
 
-        // Insert the cart rows into the cartData container
         cartData.innerHTML = cartRows;
 
+        totalAmountContainer.innerHTML = `
+        <div class="d-flex justify-content-between p-3">
+            <div><strong>Total Amount</strong></div>
+            <div>$${totalAmount.toFixed(2)}</div>
+        </div>`;
     } catch (error) {
         console.error("Error adding to cart:", error);
     }
 }
+
+async function handleremovecartdata(p_id){
+    console.log("p_id",p_id);
+
+    let params = new URLSearchParams(window.location.search);
+
+    let token_key = params.get('login');
+
+    let token = localStorage.getItem(token_key);
+
+    let userId = params.get('userId');
+    console.log("userID",userId);
+
+    try {
+        let data = {userId};
+
+        let strdata = JSON.stringify(data);
+
+        let response = await fetch(`/removeCartData/${p_id}`,{
+            method : 'DELETE',
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : `Bearer ${token}`
+            },
+            body : strdata,
+        });
+        console.log("response : ",response);
+
+        let parsed_response = await response.json();
+        console.log('parsed_response',parsed_response);
+
+        if(parsed_response.statusCode === 200){
+            window.location.reload();
+        }
+
+        
+    } catch (error) {
+        console.log("error",error);
+    }
+
+}
+
 
 async function gotoCart() {
     // Get the URL parameters
@@ -1110,12 +1162,21 @@ async function getCartData() {
             let cd_values = '';
             parsed_response.data.forEach((item) => {
                 cd_values += `
-                    <div class="p-5 card">
-                        <div><img src="${item.images[0]?.url || ''}" alt="Product image"></div>
-                        <div>${item.name || 'Unknown Product'}</div>
-                        <div>${item.brand || 'Unknown Brand'}</div>
-                        <div>${item.price || 'N/A'}</div>
-                        <div>${item.stock || 'Out of stock'}</div>
+                    <div class="container">
+                        <div class="p-5 card">
+                           <div class = "d-flex gap-3">
+                                <div>
+                                <div><img src="${item.images[0]?.url || ''}" alt="Product image" style="width: 112px; height: 112px;"></div>
+                           </div>
+                            <div>
+                                <div>${item.name || 'Unknown Product'}</div>
+                                <div>Brand : ${item.brand || 'Unknown Brand'}</div>
+                                <div>$${item.price || 'N/A'}</div>
+                                <div>Stock remaining : ${item.stock || 'Out of stock'}</div>
+                                <div class="pt-3"><button onclick="handleremovecartdata('${item.productId}')" class="remove-button-style">REMOVE</button></div>
+                            </div>
+                           </div>
+                        </div>
                     </div>
                 `;
             });
@@ -1414,7 +1475,7 @@ function checkUserStatus() {
     console.log("id", id)
 
     let profile = document.getElementById('profile');
-    let signin = document.getElementById('signin'); 
+    let signin = document.getElementById('signin');
     if (id === null) {
         profile.style.display = "none"
     } else {

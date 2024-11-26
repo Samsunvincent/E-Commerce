@@ -7,6 +7,7 @@ const category = require('../db/model/category');
 const product = require('../db/model/product-model')
 const addtocartmodel = require('../db/model/addtocart-Model');
 const Cart = require('../db/model/addtocart-Model');
+const order = require('../db/model/order-Model');
 
 
 
@@ -338,7 +339,7 @@ exports.addAddress = async function (req, res) {
     let newAddress = req.body.Address;
     console.log("new address",newAddress) // New address from the request body
 
-    // Check if the Address field is provided
+    // Check if the Address field is addt
     if (!newAddress) {
         let response = error_function({
             success: false,
@@ -506,38 +507,47 @@ exports.addToCart = async function (req, res) {
             return res.status(response.statusCode).send(response);
         }
 
-        // Retrieve or create cart for the user
+        // Retrieve the cart or create a new one if it doesn't exist
         let cart = await addtocartmodel.findOne({ userId });
+
+        // Ensure no stale data is present after deletion
         if (!cart) {
+            console.log("No existing cart found, creating a new cart.");
             cart = new addtocartmodel({ userId, items: [] });
+        } else {
+            console.log("Existing cart found:", cart);
         }
 
-        // Check if product is already in the cart
+        // Check if the product is already in the cart
         const existingItem = cart.items.find(
             (item) => item.productId.toString() === productId
         );
 
         if (existingItem) {
-            // Update quantity for existing product
-            existingItem.quantity += quantity; // Adding the quantity to the existing item
+            // Update quantity for the existing product
+            existingItem.quantity += quantity;
+            console.log(`Updated quantity for product ${productId}:`, existingItem.quantity);
         } else {
-            // Add new product to cart
+            // Add new product to the cart
             cart.items.push({ productId, quantity, price });
+            console.log(`Added new product ${productId} to the cart.`);
         }
 
         // Save the updated cart
         await cart.save();
 
-        // After saving, populate product details for all cart items
-        const cartWithProductDetails = await Promise.all(cart.items.map(async (item) => {
-            const productDetail = await product.findById(item.productId); // Fetch full product details
-            return {
-                ...item.toObject(), // Spread the cart item properties
-                product: productDetail // Add product details
-            };
-        }));
+        // Populate product details for all cart items
+        const cartWithProductDetails = await Promise.all(
+            cart.items.map(async (item) => {
+                const productDetail = await product.findById(item.productId).populate("sellerID");
+                return {
+                    ...item.toObject(), // Spread cart item properties
+                    product: productDetail // Add product details
+                };
+            })
+        );
 
-        // Send response with the updated cart and full product details
+        // Send the response with updated cart and full product details
         let response = success_function({
             success: true,
             statusCode: 200,
@@ -556,6 +566,7 @@ exports.addToCart = async function (req, res) {
         return res.status(response.statusCode).send(response);
     }
 };
+
 
 exports.getCartData = async function (req, res) {
     const id = req.params.id;
@@ -608,6 +619,119 @@ exports.getCartData = async function (req, res) {
         return res.status(response.statusCode).send(response);
     }
 };
+
+exports.removeCartData = async function (req, res) {
+    try {
+        const { userId } = req.body; // Assuming user ID is passed in the request body
+        const productId = req.params.id; // Product ID is passed as a URL parameter
+
+        // Validate input
+        if (!userId || !productId) {
+            let response = error_function({
+                success: false,
+                statusCode: 400,
+                message: "User ID or Product ID is missing",
+            });
+            return res.status(response.statusCode).send(response);
+        }
+
+        // Find and update the cart by removing the product from the items array
+        const updatedCart = await Cart.findOneAndUpdate(
+            { userId }, // Match the user's cart
+            { $pull: { items: { productId } } }, // Remove the product from items array
+            { new: true } // Return the updated document
+        );
+
+        // If no cart or product is found
+        if (!updatedCart || updatedCart.items.length === 0) {
+            let response = error_function({
+                success: false,
+                statusCode: 404,
+                message: "Product not found in the cart or cart is empty",
+            });
+            return res.status(response.statusCode).send(response);
+        }
+
+        // Success response
+        let response = success_function({
+            success: true,
+            statusCode: 200,
+            message: "Product removed successfully",
+            data: updatedCart,
+        });
+        return res.status(response.statusCode).send(response);
+
+    } catch (error) {
+        console.error("Error removing cart data:", error);
+        let response = error_function({
+            success: false,
+            statusCode: 500,
+            message: "Internal Server Error",
+        });
+        return res.status(response.statusCode).send(response);
+    }
+};
+
+
+
+exports.addOrder = async function (req, res) {
+    try {
+        let p_id = req.params.p_id;
+        console.log("p_id from add order:", p_id);
+
+        let userId = req.body.userId; // Ensure proper casing for "userId"
+        console.log("userId:", userId);
+
+        let { quantity, price } = req.body; // Assume these are sent in the request body
+
+        // Validate required fields
+        if (!p_id || !userId || !quantity || !price) {
+            let response = {
+                success: false,
+                statusCode: 400,
+                message: 'Missing required fields: productId, userId, quantity, or price',
+            };
+            return res.status(response.statusCode).send(response);
+        }
+
+        // Calculate total amount
+        let totalAmount = quantity * price;
+
+        // Create a new order
+        const newOrder = new order({
+            userId: userId,
+            products: [
+                {
+                    productId: p_id,
+                    quantity: quantity,
+                    price: price,
+                },
+            ],
+            totalAmount: totalAmount,
+        });
+
+        // Save the order to the database
+        const savedOrder = await newOrder.save();
+
+        // Respond with success
+        return res.status(201).send({
+            success: true,
+            statusCode: 201,
+            message: 'Order created successfully',
+            order: savedOrder,
+        });
+    } catch (error) {
+        console.error('Error adding order:', error);
+        return res.status(500).send({
+            success: false,
+            statusCode: 500,
+            message: 'Internal server error',
+        });
+    }
+};
+
+
+
 
 
 
